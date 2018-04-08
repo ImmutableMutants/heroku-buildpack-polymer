@@ -13,6 +13,10 @@ function speak () {
   echo "-----> $(date -u '+%Y-%m-%d_%H:%M:%S') $1"
 }
 
+speak "BUILD_DIR = $BUILD_DIR" 
+speak "CACHE_DIR = $CACHE_DIR" 
+speak "ENV_DIR = $ENV_DIR" 
+
 BLACKLIST_REGEX="^(PATH|GIT_DIR|CPATH|CPPATH|LD_PRELOAD|LIBRARY_PATH)$"
 if [ -d "$ENV_DIR" ]; then
   speak "Exporting config vars"
@@ -23,20 +27,12 @@ if [ -d "$ENV_DIR" ]; then
   done
 fi
 
-speak "Installing NPM..."
-cd $BUILD_DIR
-NODE_DIR="node-v7.8.0-linux-x64"
-NODE_TAR="$NODE_DIR.tar.gz"
-wget -nv https://nodejs.org/dist/v7.8.0/$NODE_TAR
-tar -zxf $NODE_TAR
-export PATH="$PATH:$BUILD_DIR/$NODE_DIR/bin"
-
+# npm (and bower as it is in devDependencies) was installed using https://github.com/heroku/heroku-buildpack-nodejs
+# bower installed all dependencies using https://github.com/ejholmes/heroku-buildpack-bower
 speak "Installing Polymer 2..."
-npm install -g polymer-cli bower rollup nps
+npm install -g polymer-cli rollup nps
 npm install babel-core rollup-plugin-babel rollup-plugin-commonjs
 
-speak "Installing package dependencies..."
-bower install
 speak "Building and bundling Polymer project..."
 polymer build --bundle --js-minify --css-minify --html-minify
 
