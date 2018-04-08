@@ -16,6 +16,7 @@ function speak () {
 speak "BUILD_DIR = $BUILD_DIR" 
 speak "CACHE_DIR = $CACHE_DIR" 
 speak "ENV_DIR = $ENV_DIR" 
+speak "PATH = $PATH"
 
 BLACKLIST_REGEX="^(PATH|GIT_DIR|CPATH|CPPATH|LD_PRELOAD|LIBRARY_PATH)$"
 if [ -d "$ENV_DIR" ]; then
